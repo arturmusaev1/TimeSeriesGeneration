@@ -1,0 +1,1 @@
+trend_highlighting(Calm, 6);
