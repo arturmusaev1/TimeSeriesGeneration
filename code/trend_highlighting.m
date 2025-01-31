@@ -23,14 +23,3 @@ function [trend, median_values, C, L] = trend_highlighting(Calm, level, waveletN
     [C, L] = wavedec(median_values, level, waveletName);
     trend = wrcoef('a', C, L, waveletName, level);
 
-    figure;
-    plot(median_values, 'LineWidth', 1.5);
-    hold on;
-    plot(trend, 'r', 'LineWidth', 2);
-     xlabel('Номер столбца');
-    ylabel('Медиана');
-    title('Исходный сигнал и извлечённый тренд с помощью вейвлет-преобразования');
-    legend('Исходный сигнал', 'Тренд');
-    grid on;
-    hold off;
-
