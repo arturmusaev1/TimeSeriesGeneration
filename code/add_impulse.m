@@ -1,11 +1,15 @@
 function trend_with_anomaly = add_impulse(trend, anomaly_type, start_idx, duration, amplitude)
-    % Функция добавления аномалии в тренд
-    % trend - входной тренд
-    % anomaly_type - тип аномалии ('triangle' или 'gaussian')
-    % start_idx - индекс начала аномалии
-    % duration - продолжительность аномалии
-    % amplitude - амплитуда аномалии
-
+% add_impulse Добавляет аномалию в данные.
+%
+% Входные аргументы:
+%   trend - выделенный ранее тренд данных
+%   anomaly_type - тип аномалии. Доступны 'gaussian' - аномалия,
+%   моделированная по Гауссу, 'triangle' - треугольный импульс
+%   start_idx - индекс начала аномалии
+%   duration - длительность аномалии
+%   amplitude - амлитуда аномаллии
+% Выходные аргументы:
+%   trend_with_anomaly - измененный тренд
     trend_with_anomaly = trend;
     n = length(trend);
     
@@ -15,10 +19,8 @@ function trend_with_anomaly = add_impulse(trend, anomaly_type, start_idx, durati
     
     switch anomaly_type
         case 'triangle'
-            % Создаём треугольный импульс
             anomaly = amplitude * triang(duration)';
         case 'gaussian'
-            % Создаём импульс, моделированный по гауссовскому распределению
             x = linspace(-2, 2, duration);
             anomaly = amplitude * exp(-x.^2);
         otherwise
