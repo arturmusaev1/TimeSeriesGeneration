@@ -22,11 +22,11 @@ function [trend, median_values, C, L] = trend_highlighting(Calm, level, waveletN
     median_values = median(Calm, 1);
     [C, L] = wavedec(median_values, level, waveletName);
     trend = wrcoef('a', C, L, waveletName, level);
-    figure;
-    plot(median_values, 'b', 'LineWidth', 2); hold on
-    plot(trend, 'r', 'LineWidth', 2); 
-    xlabel('Номер столбца');
-    ylabel('Значение тренда');
-    title('Изначачальные данные');
-    grid on;
+    %figure;
+    %plot(median_values, 'b', 'LineWidth', 2); hold on
+    %plot(trend, 'r', 'LineWidth', 2); 
+    %xlabel('Номер столбца');
+    %ylabel('Значение тренда');
+    %title('Изначачальные данные');
+    %grid on;
 
