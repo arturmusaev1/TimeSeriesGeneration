@@ -33,6 +33,9 @@ function trend_analysis_gui
     % Поле для ввода SNR
     uicontrol('Style', 'text', 'String', 'SNR:', 'Position', [200 470 100 20]);
     snr_edit = uicontrol('Style', 'edit', 'Position', [310 470 50 25], 'String', '2');
+    
+    uicontrol('Style', 'text', 'String', 'Тип аномалии: длительность, начало', ...
+          'Position', [650 605 200 20], 'FontWeight', 'bold', 'HorizontalAlignment', 'left');
 
     % Поле для отображения длины тренда
     trend_length_text = uicontrol('Style', 'text', 'String', 'Длина тренда: -', 'Position', [20 420 200 20]);
@@ -68,6 +71,10 @@ function trend_analysis_gui
     end
 
     function add_anomaly(~, ~)
+        if isempty(get(anomaly_duration_edit, 'String')) || isempty(get(anomaly_start_edit, 'String'))
+            msgbox('Ошибка: Поля "Длительность" и "Середина" не могут быть пустыми!', 'Ошибка', 'error');
+            return;
+        end
         type_idx = get(anomaly_type_menu, 'Value');
         type_list = get(anomaly_type_menu, 'String');
         anomaly_type = type_list{type_idx};
@@ -98,7 +105,10 @@ function trend_analysis_gui
             msgbox('Сначала загрузите данные!');
             return;
         end
-
+        if isempty(get(trend_repeat_edit, 'String')) || isnan(str2double(get(trend_repeat_edit, 'String')))
+            msgbox('Ошибка: Введите корректное число повторов тренда!', 'Ошибка', 'error');
+            return;
+        end
         median_values = median(Calm, 1);
         trend = trend_highlighting(median_values, 3);
         trend_length = length(trend);
@@ -108,7 +118,11 @@ function trend_analysis_gui
 
         for i = 1:length(anomalies)
             anomaly = anomalies{i};
-            spoiled_trend = add_impulse(spoiled_trend, anomaly{1}, anomaly{2}, anomaly{3}, 2);
+            if anomaly{3} - anomaly{2}/2 < 1 || anomaly{3} + anomaly{2}/2 > length(repeated_trend)
+                msgbox('Ошибка: Аномалия выходит за пределы тренда!', 'Ошибка', 'error');
+                return;
+            end
+            spoiled_trend = add_impulse(spoiled_trend, anomaly{1}, anomaly{3}, anomaly{2}, 2);
         end
 
         rms_signal = sum((mean(median_values(:)) - median_values(:)).^2) / length(median_values);
@@ -133,15 +147,15 @@ function trend_analysis_gui
             trend_matrix(i, :) = data((i - 1) * trend_length + 1 : i * trend_length);
         end
 
-        save('data/trend_data.mat', 'trend_matrix');
+        save('trend_data.mat', 'trend_matrix');
 
         axes(axes_handle);
         cla;
         hold on;
         len_original = length(median_values);
         len_generated = length(repeated_trend);
-        x_original = 1:len_original;
-        x_generated = (len_original + 1):(len_original + len_generated);
+        x_original = -len_original:-1;
+        x_generated = 1:len_generated;
         plot(x_original, median_values, 'k', 'LineWidth', 2);
         plot(x_original, trend, 'm', 'LineWidth', 2);
         plot(x_generated, data, 'b', 'LineWidth', 2);
