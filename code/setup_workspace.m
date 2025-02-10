@@ -24,18 +24,21 @@ function trend_analysis_gui
 
     uicontrol('Style', 'text', 'String', 'Начало:', 'Position', [200 540 100 20]);
     anomaly_start_edit = uicontrol('Style', 'edit', 'Position', [310 540 50 25], 'String', '200');
+    
+    uicontrol('Style', 'text', 'String', 'Амплитуда:', 'Position', [200 510 100 20]);
+    anomaly_amplitude_edit = uicontrol('Style', 'edit', 'Position', [310 510 50 25], 'String', '2');
 
     % Поле выбора типа шума
-    uicontrol('Style', 'text', 'String', 'Тип шума:', 'Position', [200 500 100 20]);
-    noise_type_menu = uicontrol('Style', 'popupmenu', 'Position', [310 500 100 25], ...
+    uicontrol('Style', 'text', 'String', 'Тип шума:', 'Position', [200 470 100 20]);
+    noise_type_menu = uicontrol('Style', 'popupmenu', 'Position', [310 470 100 25], ...
                                 'String', {'white', 'pink'});
 
     % Поле для ввода SNR
-    uicontrol('Style', 'text', 'String', 'SNR:', 'Position', [200 470 100 20]);
-    snr_edit = uicontrol('Style', 'edit', 'Position', [310 470 50 25], 'String', '2');
+    uicontrol('Style', 'text', 'String', 'SNR:', 'Position', [200 440 100 20]);
+    snr_edit = uicontrol('Style', 'edit', 'Position', [310 440 50 25], 'String', '2');
     
-    uicontrol('Style', 'text', 'String', 'Тип аномалии: длительность, начало', ...
-          'Position', [650 605 200 20], 'FontWeight', 'bold', 'HorizontalAlignment', 'left');
+    uicontrol('Style', 'text', 'String', 'Тип аномалии: длительность, начало, амплитуда', ...
+          'Position', [650 605 200 27], 'FontWeight', 'bold', 'HorizontalAlignment', 'left');
 
     % Поле для отображения длины тренда
     trend_length_text = uicontrol('Style', 'text', 'String', 'Длина тренда: -', 'Position', [20 420 200 20]);
@@ -79,16 +82,16 @@ function trend_analysis_gui
         type_list = get(anomaly_type_menu, 'String');
         anomaly_type = type_list{type_idx};
         duration = str2double(get(anomaly_duration_edit, 'String'));
+        amplitude = str2double(get(anomaly_amplitude_edit, 'String'));
         start = str2double(get(anomaly_start_edit, 'String'));
-        anomalies{end + 1} = {anomaly_type, duration, start};
+        anomalies{end + 1} = {anomaly_type, duration, start, amplitude};
         update_anomaly_list();
     end
 
     function update_anomaly_list()
-        anomaly_strings = cellfun(@(a) sprintf('%s: %d, %d', a{1}, a{2}, a{3}), anomalies, 'UniformOutput', false);
+        anomaly_strings = cellfun(@(a) sprintf('%s: %d, %d, %d', a{1}, a{2}, a{3}, a{4}), anomalies, 'UniformOutput', false);
         set(anomaly_list, 'String', anomaly_strings);
     end
-
     function remove_anomaly(~, ~)
         selected_index = get(anomaly_list, 'Value');
         if selected_index > 0 && selected_index <= length(anomalies)
@@ -118,11 +121,11 @@ function trend_analysis_gui
 
         for i = 1:length(anomalies)
             anomaly = anomalies{i};
-            if anomaly{3} - anomaly{2}/2 < 1 || anomaly{3} + anomaly{2}/2 > length(repeated_trend)
+            if anomaly{3} + anomaly{2} > length(repeated_trend)
                 msgbox('Ошибка: Аномалия выходит за пределы тренда!', 'Ошибка', 'error');
                 return;
             end
-            spoiled_trend = add_impulse(spoiled_trend, anomaly{1}, anomaly{3}, anomaly{2}, 2);
+            spoiled_trend = add_impulse(spoiled_trend, anomaly{1}, anomaly{3}, anomaly{2}, anomaly{4});
         end
 
         rms_signal = sum((mean(median_values(:)) - median_values(:)).^2) / length(median_values);
