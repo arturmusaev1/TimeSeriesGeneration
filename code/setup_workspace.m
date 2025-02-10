@@ -18,21 +18,19 @@ function trend_analysis_gui
     uicontrol('Style', 'text', 'String', 'Тип аномалии:', 'Position', [200 600 100 20]);
     anomaly_type_menu = uicontrol('Style', 'popupmenu', 'Position', [310 600 100 25], ...
                                   'String', {'gaussian', 'triangle'});
-
+    % Поле задания длительности аномалии
     uicontrol('Style', 'text', 'String', 'Длительность:', 'Position', [200 570 100 20]);
     anomaly_duration_edit = uicontrol('Style', 'edit', 'Position', [310 570 50 25], 'String', '300');
-
+    % Поле для ввода аномалии
     uicontrol('Style', 'text', 'String', 'Начало:', 'Position', [200 540 100 20]);
     anomaly_start_edit = uicontrol('Style', 'edit', 'Position', [310 540 50 25], 'String', '200');
-    
+    % Поле задания амплитуды аномалии
     uicontrol('Style', 'text', 'String', 'Амплитуда:', 'Position', [200 510 100 20]);
     anomaly_amplitude_edit = uicontrol('Style', 'edit', 'Position', [310 510 50 25], 'String', '2');
-
     % Поле выбора типа шума
     uicontrol('Style', 'text', 'String', 'Тип шума:', 'Position', [200 470 100 20]);
     noise_type_menu = uicontrol('Style', 'popupmenu', 'Position', [310 470 100 25], ...
                                 'String', {'white', 'pink'});
-
     % Поле для ввода SNR
     uicontrol('Style', 'text', 'String', 'SNR:', 'Position', [200 440 100 20]);
     snr_edit = uicontrol('Style', 'edit', 'Position', [310 440 50 25], 'String', '2');

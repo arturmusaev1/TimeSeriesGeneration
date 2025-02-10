@@ -13,7 +13,6 @@ function noisy_signal = adding_noise(trend, noise_type, rms_signal, snr)
         snr = 1;
     end
 
-    % Генерация шума
     switch lower(noise_type)
         case 'white'
             noise = randn(size(trend));
