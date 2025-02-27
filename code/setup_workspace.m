@@ -59,6 +59,7 @@ function trend_analysis_gui
     Data = [];
     anomalies = {};
     file_ext = '';
+    trend_length = 0;
     function load_data(~, ~)
         [file, path] = uigetfile({'*.mat;*.csv', 'Файлы данных (*.mat, *.csv)'; '*.mat', 'MAT-файлы (*.mat)'; '*.csv', 'CSV-файлы (*.csv)'}, 'Выберите файл с данными');
     
@@ -80,6 +81,8 @@ function trend_analysis_gui
                 errordlg('Выбран неподдерживаемый формат файла!', 'Ошибка');
                 return;
             end
+            trend_length = length(Data);
+            set(trend_length_text, 'String', sprintf('Длина тренда: %d', trend_length));
             msgbox('Данные загружены!');
         end
     end
