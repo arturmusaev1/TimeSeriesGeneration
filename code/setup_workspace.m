@@ -1,5 +1,4 @@
 function trend_analysis_gui
-    % Создаем графический интерфейс с увеличенным размером
     fig = figure('Name', 'Анализ трендов', 'NumberTitle', 'off', 'Position', [100 100 900 700]);
 
     % Кнопка загрузки данных
@@ -56,21 +55,34 @@ function trend_analysis_gui
               'Callback', @remove_anomaly);
 
     % Глобальные переменные
-    global Calm anomalies;
-    Calm = [];
+    global Data anomalies;
+    Data = [];
     anomalies = {};
-
+    file_ext = '';
     function load_data(~, ~)
-        [file, path] = uigetfile('*.mat', 'Выберите файл с данными');
+        [file, path] = uigetfile({'*.mat;*.csv', 'Файлы данных (*.mat, *.csv)'; '*.mat', 'MAT-файлы (*.mat)'; '*.csv', 'CSV-файлы (*.csv)'}, 'Выберите файл с данными');
+    
         if file
-            data = load(fullfile(path, file));
-            Calm = data.Calm;
-            trend_length = length(median(Calm, 1));
-            set(trend_length_text, 'String', sprintf('Длина тренда: %d', trend_length));
+            [~, ~, ext] = fileparts(file); % Определяем расширение файла
+            file_ext = ext;
+            
+            if strcmp(ext, '.mat')
+                data = load(fullfile(path, file));
+                if isfield(data, 'Data')
+                    Data = data.Data;
+                else
+                    errordlg('Файл MAT не содержит переменной "Data"', 'Ошибка');
+                    return;
+                end
+            elseif strcmp(ext, '.csv')
+                Data = readmatrix(fullfile(path, file));
+            else
+                errordlg('Выбран неподдерживаемый формат файла!', 'Ошибка');
+                return;
+            end
             msgbox('Данные загружены!');
         end
     end
-
     function add_anomaly(~, ~)
         if isempty(get(anomaly_duration_edit, 'String')) || isempty(get(anomaly_start_edit, 'String'))
             msgbox('Ошибка: Поля "Длительность" и "Середина" не могут быть пустыми!', 'Ошибка', 'error');
@@ -102,7 +114,7 @@ function trend_analysis_gui
     end
 
     function generate_data(~, ~)
-        if isempty(Calm)
+        if isempty(Data)
             msgbox('Сначала загрузите данные!');
             return;
         end
@@ -110,7 +122,7 @@ function trend_analysis_gui
             msgbox('Ошибка: Введите корректное число повторов тренда!', 'Ошибка', 'error');
             return;
         end
-        median_values = median(Calm, 1);
+        median_values = median(Data, 1);
         trend = trend_highlighting(median_values, 3);
         trend_length = length(trend);
         trend_repeats = str2double(get(trend_repeat_edit, 'String'));
@@ -148,8 +160,13 @@ function trend_analysis_gui
             trend_matrix(i, :) = data((i - 1) * trend_length + 1 : i * trend_length);
         end
 
-        save('trend_data.mat', 'trend_matrix');
-
+        if strcmp(file_ext, '.mat')
+            save('generated_data.mat', 'trend_matrix');
+        elseif strcmp(file_ext, '.csv')
+            writematrix(trend_matrix, 'generated_data.csv');
+        end
+        
+        msgbox('Данные сохранены в файл!');
         axes(axes_handle);
         cla;
         hold on;
@@ -170,6 +187,5 @@ function trend_analysis_gui
         grid on;
         hold off;
 
-        msgbox('Данные сохранены в файл "data/trend_data.mat"!');
     end
 end
