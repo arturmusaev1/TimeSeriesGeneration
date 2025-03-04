@@ -106,9 +106,11 @@ function trend_analysis_gui
 
     function load_data(~, ~)
         [file, path] = uigetfile({'*.mat;*.csv','Файлы данных (*.mat, *.csv)'; '*.mat','MAT-файлы (*.mat)'; '*.csv','CSV-файлы (*.csv)'}, 'Выберите файл с данными');
+        
         if file
             [~, ~, ext] = fileparts(file);
             file_ext = ext;
+            
             if strcmp(ext, '.mat')
                 data = load(fullfile(path, file));
                 if isfield(data, 'Data')
@@ -123,10 +125,19 @@ function trend_analysis_gui
                 errordlg('Выбран неподдерживаемый формат файла!', 'Ошибка');
                 return;
             end
+            
             set(trend_length_text, 'String', sprintf('Длина тренда: %d', length(Data)));
-            msgbox('Данные загружены!');
+            median_values = median(Data, 1);
+            axes(axes_handle);
+            cla;
+            plot(median_values, 'k', 'LineWidth', 2);
+            xlabel('Номер столбца');
+            ylabel('Медианное значение');
+            title('График median_values');
+            grid on;
         end
     end
+
 
     function load_user_anomaly(~, ~)
         [file, path] = uigetfile({'*.mat;*.csv','Файлы аномалии (*.mat, *.csv)'; '*.mat','MAT-файлы (*.mat)'; '*.csv','CSV-файлы (*.csv)'}, 'Выберите файл с пользовательской аномалией');
