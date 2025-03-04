@@ -133,7 +133,8 @@ function trend_analysis_gui
             plot(median_values, 'k', 'LineWidth', 2);
             xlabel('Номер столбца');
             ylabel('Медианное значение');
-            title('График median_values');
+            title('График медианных значений');
+            legend({'Исходные данные'}, 'Location', 'best');
             grid on;
         end
     end
@@ -145,8 +146,8 @@ function trend_analysis_gui
             [~, ~, ext] = fileparts(file);
             if strcmp(ext, '.mat')
                 anomaly_data = load(fullfile(path, file));
-                if isfield(anomaly_data, 'user_anomaly_data')
-                    user_anomaly_data = anomaly_data.user_anomaly_data;
+                if isfield(anomaly_data, 'anomaly')
+                    user_anomaly_data = anomaly_data.anomaly;
                 else
                     errordlg('Файл MAT не содержит переменной "user_anomaly_data"', 'Ошибка');
                     return;
