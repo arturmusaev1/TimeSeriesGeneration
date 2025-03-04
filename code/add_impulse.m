@@ -43,7 +43,6 @@ function trend_with_anomaly = add_impulse(trend, anomaly_type, start_idx, durati
             if isempty(user_anomaly)
                 error('Пользовательская аномалия не загружена');
             end
-            % Для пользовательской аномалии не масштабируем сигнал
             anomaly = user_anomaly;
             anomaly = reshape(anomaly, 1, []);
         otherwise
