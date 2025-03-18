@@ -1,11 +1,10 @@
-% Загрузка данных
+
 original_data = readmatrix('../data/matlab_data.csv', 'NumHeaderLines', 1);
 user_generated_data = readmatrix('../data/generated_data.csv', 'NumHeaderLines', 1);
 gan_generated_data = readmatrix('../data/generated_gan.csv', 'NumHeaderLines', 1);
 arima_generated_data = readmatrix('../data/generated_timeseries_arima.csv', 'NumHeaderLines', 1);
 lstm_generated_data = readmatrix('../data/generated_lstm.csv', 'NumHeaderLines', 1);
 
-% Вычисление характеристик
 mean_values = [mean(original_data(:)), mean(user_generated_data(:)), mean(gan_generated_data(:)), mean(arima_generated_data(:)), mean(lstm_generated_data(:))];
 std_values = [std(original_data(:)), std(user_generated_data(:)), std(gan_generated_data(:)), std(arima_generated_data(:)), std(lstm_generated_data(:))];
 median_values = [median(original_data(:)), median(user_generated_data(:)), median(gan_generated_data(:)), median(arima_generated_data(:)), median(lstm_generated_data(:))];
@@ -21,14 +20,12 @@ stats_table = table({'Original', 'User Generated', 'GAN Generated', 'ARIMA Gener
     'VariableNames', {'Dataset', 'Mean', 'Std_Dev', 'Median', 'Min', 'Max', 'CV', 'MAD', 'Kurtosis', 'Skewness'});
 disp(stats_table);
 
-% Вычисление медиан
 original_median = median(original_data, 1);
 user_generated_median = median(user_generated_data, 1);
 gan_generated_median = median(gan_generated_data, 1);
 arima_generated_median = median(arima_generated_data, 1);
 lstm_generated_median = median(lstm_generated_data, 1);
 
-% Создание единого окна с 5 графиками
 figure;
 
 subplot(5,1,1);
