@@ -259,11 +259,16 @@ function trend_analysis_gui
             trend_matrix(i, :) = data((i - 1) * trend_length + 1 : i * trend_length);
         end
     
-        if strcmp(file_ext, '.mat')
-            save('generated_data.mat', 'trend_matrix');
-        elseif strcmp(file_ext, '.csv')
-            writematrix(trend_matrix, 'generated_data.csv');
-        end
+    if strcmp(file_ext, '.mat')
+        save('generated_data.mat', 'trend_matrix');
+    elseif strcmp(file_ext, '.csv')
+        num_columns = size(trend_matrix, 2);
+        column_numbers = 0:num_columns-1;
+        
+        writematrix(column_numbers, 'generated_data.csv');
+
+        writematrix(trend_matrix, 'generated_data.csv', 'WriteMode', 'append');
+    end
         axes(axes_handle);
         cla;
         hold on;
