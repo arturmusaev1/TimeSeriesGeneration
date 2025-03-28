@@ -1,5 +1,7 @@
 # TimeSeriesGeneration
 
+<img src="figures/figure.jpg" alt="Черно-белый портрет" width="100%" height="auto">
+
 Приложение на MATLAB, предназначенное для генерации временных рядов.
 
 # Установка
