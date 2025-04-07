@@ -8,16 +8,12 @@ lstm_generated_data = readmatrix('../data/generated_lstm.csv', 'NumHeaderLines',
 mean_values = [mean(original_data(:)), mean(user_generated_data(:)), mean(gan_generated_data(:)), mean(arima_generated_data(:)), mean(lstm_generated_data(:))];
 std_values = [std(original_data(:)), std(user_generated_data(:)), std(gan_generated_data(:)), std(arima_generated_data(:)), std(lstm_generated_data(:))];
 median_values = [median(original_data(:)), median(user_generated_data(:)), median(gan_generated_data(:)), median(arima_generated_data(:)), median(lstm_generated_data(:))];
-cv_values = std_values ./ mean_values;
-mad_values = [mad(original_data(:)), mad(user_generated_data(:)), mad(gan_generated_data(:)), mad(arima_generated_data(:)), mad(lstm_generated_data(:))];
-kurtosis_values = [kurtosis(original_data(:)), kurtosis(user_generated_data(:)), kurtosis(gan_generated_data(:)), kurtosis(arima_generated_data(:)), kurtosis(lstm_generated_data(:))];
-skewness_values = [skewness(original_data(:)), skewness(user_generated_data(:)), skewness(gan_generated_data(:)), skewness(arima_generated_data(:)), skewness(lstm_generated_data(:))];
 
-min_values = [min(median(original_data, 2)), min(median(user_generated_data, 2)), min(median(gan_generated_data, 2)), min(median(arima_generated_data, 2)), min(median(lstm_generated_data, 2))];
+min_values = [min(median(original_data)), min(median(user_generated_data)), min(median(gan_generated_data)), min(median(arima_generated_data)), min(median(lstm_generated_data))];
 max_values = [max(median(original_data)), max(median(user_generated_data)), max(median(gan_generated_data)), max(median(arima_generated_data)), max(median(lstm_generated_data))];
 
-stats_table = table({'Original', 'User Generated', 'GAN Generated', 'ARIMA Generated', 'LSTM Generated'}', mean_values', std_values', median_values', min_values', max_values', cv_values', mad_values', kurtosis_values', skewness_values', ...
-    'VariableNames', {'Dataset', 'Mean', 'Std_Dev', 'Median', 'Min', 'Max', 'CV', 'MAD', 'Kurtosis', 'Skewness'});
+stats_table = table({'Original', 'User Generated', 'GAN Generated', 'ARIMA Generated', 'LSTM Generated'}', mean_values', std_values', median_values', min_values', max_values', ...
+    'VariableNames', {'Dataset', 'Mean', 'Std_Dev', 'Median', 'Min', 'Max'});
 disp(stats_table);
 
 original_median = median(original_data, 1);
