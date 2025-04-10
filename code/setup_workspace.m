@@ -260,14 +260,14 @@ function trend_analysis_gui
         end
     
     if strcmp(file_ext, '.mat')
-        save('../data/generated_data.mat', 'trend_matrix');
+        save('generated_data.mat', 'trend_matrix');
     elseif strcmp(file_ext, '.csv')
         num_columns = size(trend_matrix, 2);
         column_numbers = 0:num_columns-1;
         
-        writematrix(column_numbers, '../data/generated_data.csv');
+        writematrix(column_numbers, 'generated_data.csv');
 
-        writematrix(trend_matrix, '../data/generated_data.csv', 'WriteMode', 'append');
+        writematrix(trend_matrix, 'generated_data.csv', 'WriteMode', 'append');
     end
         axes(axes_handle);
         cla;
@@ -285,7 +285,7 @@ function trend_analysis_gui
         ylabel('Значение тренда');
         title('Сравнение оригинальных и сгенерированных данных');
         legend({'Исходные данные', 'Исходный тренд', 'Данные с шумом', 'Тренд с аномалиями', 'Повторённый тренд'}, 'Location', 'best');
-        grid off;
+        grid on;
         hold off;
     end
 end
