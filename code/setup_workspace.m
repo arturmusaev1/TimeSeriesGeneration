@@ -1,5 +1,5 @@
 function trend_analysis_gui
-    fig = figure('Name', 'Анализ трендов', 'NumberTitle', 'off', 'Position', [100 100 1100 700]);
+    fig = figure('Name', 'TimeSeriesGenerator', 'NumberTitle', 'off', 'Position', [100 100 1100 700]);
     
     %% Левая панель управления (ширина примерно 300 пикселей)
     % Кнопка загрузки данных
