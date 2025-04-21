@@ -1,8 +1,7 @@
 function [trend, median_values, C, L] = trend_highlighting(median_values, level, waveletName)
 % trend_highlighting Извлекает тренд из данных с помощью вейвлет-преобразования.
 %
-% Входные аргументы:
-%   Calm        - Матрица данных (например, размер MxN).
+% Входные аргументы:.
 %   waveletName - Название вейвлета. По умолчанию 'db4'.
 %   level       - Уровень декомпозиции. По умолчанию 4.
 %   plotDetails - Логический флаг для отображения детализационных коэффициентов. По умолчанию false.

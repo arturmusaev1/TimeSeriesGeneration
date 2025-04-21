@@ -1,3 +1,4 @@
+
 function trend_with_anomaly = add_impulse(trend, anomaly_type, start_idx, duration, amplitude, user_anomaly)
 % add_impulse Добавляет аномалию в данные.
 %

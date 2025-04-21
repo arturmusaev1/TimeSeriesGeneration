@@ -71,7 +71,7 @@ function trend_analysis_gui
               'Position', [20 70 260 30], 'Callback', @generate_data);
     
     % Отображение длины тренда
-    trend_length_text = uicontrol('Parent', fig, 'Style', 'text', 'String', 'Длина тренда: -', ...
+    trend_length_text = uicontrol('Parent', fig, 'Style', 'text', 'String', 'Количество измерений: -', ...
               'Position', [20 30 260 20], 'HorizontalAlignment', 'left');
     
     %% Правая часть окна - область графика
@@ -126,8 +126,9 @@ function trend_analysis_gui
                 return;
             end
             
-            set(trend_length_text, 'String', sprintf('Длина тренда: %d', length(Data)));
+            set(trend_length_text, 'String', sprintf('Количество измерений: %d', length(Data)));
             median_values = median(Data, 1);
+            
             axes(axes_handle);
             cla;
             plot(median_values, 'k', 'LineWidth', 2);
@@ -213,7 +214,7 @@ function trend_analysis_gui
             return;
         end
         median_values = median(Data, 1);
-        trend = trend_highlighting(median_values, 3);
+        trend = trend_highlighting(median_values, 5);
         trend_length = length(trend);
         trend_repeats = str2double(get(trend_repeat_edit, 'String'));
         repeated_trend = repmat(trend, 1, trend_repeats);
@@ -265,9 +266,9 @@ function trend_analysis_gui
         num_columns = size(trend_matrix, 2);
         column_numbers = 0:num_columns-1;
         
-        writematrix(column_numbers, 'generated_data.csv');
+        writematrix(column_numbers, '../data/generated_data.csv');
 
-        writematrix(trend_matrix, 'generated_data.csv', 'WriteMode', 'append');
+        writematrix(trend_matrix, '../data/generated_data.csv', 'WriteMode', 'append');
     end
         axes(axes_handle);
         cla;
@@ -281,8 +282,8 @@ function trend_analysis_gui
         plot(x_generated, data, 'b', 'LineWidth', 2);
         plot(x_generated, spoiled_trend, 'g', 'LineWidth', 2);
         plot(x_generated, repeated_trend, 'r', 'LineWidth', 2);
-        xlabel('Номер столбца');
-        ylabel('Значение тренда');
+        xlabel(' ');
+        ylabel(' ');
         title('Сравнение оригинальных и сгенерированных данных');
         legend({'Исходные данные', 'Исходный тренд', 'Данные с шумом', 'Тренд с аномалиями', 'Повторённый тренд'}, 'Location', 'best');
         grid on;
